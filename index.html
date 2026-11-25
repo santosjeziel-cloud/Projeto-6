@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guia Prático: Como Identificar Golpes e Links Suspeitos</title>
+    <title>Guia Prático: Segurança Digital e Leitura Acessível</title>
     <style>
         /* Estilos gerais da página */
         body {
@@ -32,6 +32,23 @@
             color: #cbd5e1;
         }
 
+        /* Barra de controle global de áudio */
+        .audio-bar {
+            background-color: #0f172a;
+            color: #f8fafc;
+            padding: 0.8rem 1rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
         .container {
             max-width: 900px;
             margin: 2rem auto;
@@ -51,6 +68,57 @@
             border-bottom: 2px solid #e2e8f0;
             padding-bottom: 0.5rem;
             margin-top: 0;
+        }
+
+        /* Botões de Leitura em Voz Alta */
+        .btn-ler {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: background-color 0.2s, transform 0.1s;
+            margin-bottom: 0.8rem;
+        }
+
+        .btn-ler:hover {
+            background-color: #1d4ed8;
+        }
+
+        .btn-ler:active {
+            transform: scale(0.97);
+        }
+
+        /* Estilo quando o botão está lendo ativamente */
+        .btn-ler.lendo {
+            background-color: #16a34a;
+            animation: pulso 1.5s infinite;
+        }
+
+        .btn-parar {
+            background-color: #dc2626;
+            color: white;
+            border: none;
+            padding: 0.45rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-parar:hover {
+            background-color: #b91c1c;
+        }
+
+        @keyframes pulso {
+            0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.5); }
+            70% { box-shadow: 0 0 0 8px rgba(22, 163, 74, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
         }
 
         /* Estilo das mensagens de exemplo */
@@ -107,6 +175,45 @@
             margin-bottom: 0.3rem;
         }
 
+        /* Conteúdo Extra: Quiz Interativo e Primeiros Socorros Digitais */
+        .quiz-box {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            padding: 1.2rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .quiz-opcoes button {
+            background-color: #1e293b;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            margin-right: 0.5rem;
+            margin-top: 0.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .quiz-opcoes button:hover {
+            background-color: #334155;
+        }
+
+        .quiz-resultado {
+            margin-top: 1rem;
+            font-weight: bold;
+            padding: 0.8rem;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .passos-emergencia {
+            background-color: #f0fdf4;
+            border-left: 5px solid #16a34a;
+            padding: 1rem 1.5rem;
+            border-radius: 4px;
+        }
+
         footer {
             text-align: center;
             padding: 1.5rem;
@@ -120,14 +227,22 @@
 
     <header>
         <h1>🛡️ Segurança Digital na Prática</h1>
-        <p>Aprenda a analisar mensagens recebidas e identificar possíveis sinais de golpe.</p>
+        <p>Analise mensagens, identifique riscos e utilize o leitor de tela integrado.</p>
     </header>
+
+    <!-- Barra de status e controle da leitura -->
+    <div class="audio-bar">
+        <span id="status-leitura">🔊 Leitor pronto. Clique em "Ouvir seção" em qualquer bloco.</span>
+        <button class="btn-parar" onclick="pararLeitura()">⏹️ Parar Leitura</button>
+    </div>
 
     <div class="container">
         
         <!-- Passo 1 e 2: Exemplos e Identificação de Risco -->
-        <section>
+        <section id="secao-exemplos">
             <h2>1. Análise de Mensagens com Links Suspeitos</h2>
+            <button class="btn-ler" onclick="iniciarLeitura('secao-exemplos', this)">🔊 Ouvir esta seção</button>
+            
             <p>Abaixo estão dois exemplos comuns de tentativas de golpe (<em>Phishing</em>) e os elementos que indicam perigo:</p>
 
             <!-- Exemplo 1 -->
@@ -139,7 +254,7 @@
                 <div class="analise-risco">
                     <p><strong>Elementos de risco identificados:</strong></p>
                     <ul>
-                        <li><strong>Endereço web (URL) falso:</strong> O domínio oficial da Caixa termina em <code>.gov.br</code> ou <code>.com.br</code>, e nunca em <code>.xyz</code>.</li>
+                        <li><strong>Endereço web (URL) falso:</strong> O domínio oficial da Caixa termina em .gov.br ou .com.br, e nunca em .xyz.</li>
                         <li><strong>Senso de urgência:</strong> Ameaça de bloqueio "hoje" para fazer a vítima agir por impulso sem pensar.</li>
                         <li><strong>Erros de escrita:</strong> Falta de acentuação ("sera", "atualizacao"), algo incomum em comunicações oficiais.</li>
                     </ul>
@@ -155,7 +270,7 @@
                 <div class="analise-risco">
                     <p><strong>Elementos de risco identificados:</strong></p>
                     <ul>
-                        <li><strong>Link não oficial:</strong> Os Correios utilizam apenas o domínio <code>correios.com.br</code>.</li>
+                        <li><strong>Link não oficial:</strong> Os Correios utilizam apenas o domínio correios.com.br.</li>
                         <li><strong>Cobrança inesperada com prazo curto:</strong> Exigência de pagamento rápido via link direto para gerar medo de perder a encomenda.</li>
                     </ul>
                 </div>
@@ -163,8 +278,10 @@
         </section>
 
         <!-- Passo 3: Lista de Sinais de Alerta -->
-        <section>
+        <section id="secao-alertas">
             <h2>2. Principais Sinais de Alerta (Checklist de Proteção)</h2>
+            <button class="btn-ler" onclick="iniciarLeitura('secao-alertas', this)">🔊 Ouvir esta seção</button>
+
             <p>Sempre desconfie quando uma mensagem apresentar os seguintes sinais:</p>
 
             <ul class="alertas-lista">
@@ -174,11 +291,11 @@
                 </li>
                 <li>
                     <strong>🔗 2. Links Estranhos ou Encurtados</strong>
-                    Passe o mouse sobre o link (ou observe com atenção no celular) antes de clicar. Desconfie de endereços com erros de digitação (ex: <em>arnazon.com</em>), extensões incomuns (<em>.xyz</em>, <em>.top</em>, <em>.net</em>) ou encurtadores (<em>bit.ly</em>) usados por supostos bancos.
+                    Observe o endereço com atenção antes de clicar. Desconfie de endereços com erros de digitação (ex: arnazon.com), extensões incomuns (.xyz, .top, .net) ou encurtadores usados por supostos bancos.
                 </li>
                 <li>
                     <strong>🎁 3. Ofertas Boas Demais para Serem Verdade</strong>
-                    Prêmios inesperados, PIX gratuito, descontos de 90% ou vagas de emprego com salários altíssimos sem exigência de experiência são iscas clássicas para roubar seus dados.
+                    Prêmios inesperados, PIX gratuito ou descontos de 90% são iscas clássicas para roubar seus dados.
                 </li>
                 <li>
                     <strong>🔑 4. Pedido de Dados Sensíveis</strong>
@@ -187,11 +304,183 @@
             </ul>
         </section>
 
+        <!-- CONTEÚDO EXTRA 1: Teste Prático Interativo -->
+        <section id="secao-quiz">
+            <h2>3. Extra: Teste seus Conhecimentos (Simulador Rápido)</h2>
+            <button class="btn-ler" onclick="iniciarLeitura('secao-quiz', this)">🔊 Ouvir desafio</button>
+            
+            <div class="quiz-box">
+                <p><strong>Cenário:</strong> Você recebe um SMS dizendo: <em>"Parabéns! Você ganhou 5.000 pontos no seu cartão que expiram hoje. Resgate em: bit.ly/resgate-pontos-vip"</em>. O que você faz?</p>
+                <div class="quiz-opcoes">
+                    <button onclick="responderQuiz(false)">Clico rápido para não perder os pontos</button>
+                    <button onclick="responderQuiz(true)">Ignoro, apago a mensagem e olho no app oficial do banco</button>
+                </div>
+                <div id="quiz-feedback" class="quiz-resultado"></div>
+            </div>
+        </section>
+
+        <!-- CONTEÚDO EXTRA 2: Guia de Emergência -->
+        <section id="secao-emergencia">
+            <h2>4. Extra: Clicou em um link suspeito por engano? Veja o que fazer</h2>
+            <button class="btn-ler" onclick="iniciarLeitura('secao-emergencia', this)">🔊 Ouvir orientações de emergência</button>
+
+            <div class="passos-emergencia">
+                <ol>
+                    <li><strong>Não preencha nenhum dado:</strong> Se a página abriu, feche o navegador imediatamente sem digitar senhas ou CPF.</li>
+                    <li><strong>Desconecte a internet:</strong> Coloque o celular em Modo Avião por alguns instantes caso tenha baixado algum arquivo desconhecido.</li>
+                    <li><strong>Troque suas senhas:</strong> Se chegou a digitar alguma senha, altere-a imediatamente usando outro dispositivo seguro.</li>
+                    <li><strong>Avise seu banco:</strong> Entre em contato pelos canais oficiais (telefone no verso do cartão) para bloquear movimentações suspeitas.</li>
+                </ol>
+            </div>
+        </section>
+
     </div>
 
     <footer>
-        <p>Projeto de Educação Digital &bull; Mantenha-se seguro na internet.</p>
+        <p>Projeto de Educação Digital &bull; Código com controle estável de leitura em voz alta.</p>
     </footer>
+
+    <!-- JAVASCRIPT COM CONTROLE DE ESTABILIDADE DE LEITURA -->
+    <script>
+        // Variáveis de controle global para evitar sobreposição e bugs de cliques rápidos
+        let leituraAtualId = 0;
+        let temporizadorLeitura = null;
+        let botaoAtivo = null;
+
+        const statusElemento = document.getElementById('status-leitura');
+
+        /**
+         * Para imediatamente qualquer leitura em andamento e limpa estados visuais
+         */
+        function pararLeitura() {
+            // Cancela qualquer agendador pendente de cliques rápidos
+            if (temporizadorLeitura) {
+                clearTimeout(temporizadorLeitura);
+                temporizadorLeitura = null;
+            }
+
+            // Incrementa o ID para invalidar eventos antigos (onend / onerror)
+            leituraAtualId++;
+
+            // Cancela a fila de fala do navegador
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+
+            // Restaura o visual do botão anterior, se houver
+            if (botaoAtivo) {
+                botaoAtivo.classList.remove('lendo');
+                botaoAtivo.innerHTML = botaoAtivo.dataset.textoOriginal || '🔊 Ouvir esta seção';
+                botaoAtivo = null;
+            }
+
+            statusElemento.textContent = '⏹️ Leitura interrompida.';
+        }
+
+        /**
+         * Inicia uma nova leitura garantindo que a anterior seja substituída sem conflitos
+         */
+        function iniciarLeitura(idSecao, botaoClicado) {
+            if (!('speechSynthesis' in window)) {
+                alert('Desculpe, seu navegador não suporta leitura em voz alta.');
+                return;
+            }
+
+            // 1. Se o usuário clicou no mesmo botão que já está lendo, funciona como "Parar"
+            const jaEstavaLendoEste = (botaoAtivo === botaoClicado);
+            
+            // 2. Interrompe qualquer leitura anterior imediatamente
+            pararLeitura();
+
+            if (jaEstavaLendoEste) {
+                return;
+            }
+
+            // Guarda o texto original do botão para restaurar depois
+            if (!botaoClicado.dataset.textoOriginal) {
+                botaoClicado.dataset.textoOriginal = botaoClicado.innerHTML;
+            }
+
+            // Atualiza estado visual imediatamente para feedback instantâneo ao clique
+            botaoAtivo = botaoClicado;
+            botaoAtivo.classList.add('lendo');
+            botaoAtivo.innerHTML = '⏸️ Lendo... (Clique para parar)';
+            statusElemento.textContent = '🔊 Preparando leitura...';
+
+            // Gera um novo ID exclusivo para esta sessão de leitura
+            const idEstaSessao = ++leituraAtualId;
+
+            // 3. Debounce / Pequeno atraso (120ms): essencial para absorver cliques rápidos e repetidos
+            // e dar tempo para o motor de áudio do navegador resetar o cancel() anterior sem travar.
+            temporizadorLeitura = setTimeout(() => {
+                // Se outro clique ocorreu nesse meio tempo, aborta esta execução
+                if (idEstaSessao !== leituraAtualId) return;
+
+                const secao = document.getElementById(idSecao);
+                if (!secao) return;
+
+                // Clona a seção para extrair apenas o texto limpo (ignorando o texto dos botões)
+                const clone = secao.cloneNode(true);
+                const botoesInternos = clone.querySelectorAll('button');
+                botoesInternos.forEach(btn => btn.remove());
+
+                const textoParaLer = clone.innerText.replace(/\s+/g, ' ').trim();
+
+                const fala = new SpeechSynthesisUtterance(textoParaLer);
+                fala.lang = 'pt-BR';
+                fala.rate = 1.05; // Velocidade confortável de leitura
+
+                fala.onstart = () => {
+                    if (idEstaSessao === leituraAtualId) {
+                        statusElemento.textContent = '🔊 Lendo conteúdo selecionado...';
+                    }
+                };
+
+                fala.onend = () => {
+                    // Só limpa se esta ainda for a leitura ativa (evita apagar o estado de uma nova leitura)
+                    if (idEstaSessao === leituraAtualId) {
+                        pararLeitura();
+                        statusElemento.textContent = '✅ Leitura concluída.';
+                    }
+                };
+
+                fala.onerror = (evento) => {
+                    // Ignora erros causados propositalmente pelo cancelamento de troca de leitura
+                    if (evento.error !== 'interrupted' && evento.error !== 'canceled') {
+                        if (idEstaSessao === leituraAtualId) {
+                            pararLeitura();
+                            statusElemento.textContent = '⚠️ Erro ao reproduzir áudio.';
+                        }
+                    }
+                };
+
+                window.speechSynthesis.speak(fala);
+            }, 120);
+        }
+
+        // Garante que o áudio pare caso o usuário feche ou recarregue a página
+        window.addEventListener('beforeunload', () => {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+        });
+
+        // Função do Conteúdo Extra (Quiz)
+        function responderQuiz(acertou) {
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.style.display = 'block';
+
+            if (acertou) {
+                feedback.style.backgroundColor = '#dcfce7';
+                feedback.style.color = '#166534';
+                feedback.innerHTML = '✅ Correto! Links encurtados (bit.ly) + urgência ("expiram hoje") são sinais claros de golpe. Sempre consulte o aplicativo oficial do seu banco.';
+            } else {
+                feedback.style.backgroundColor = '#fee2e2';
+                feedback.style.color = '#991b1b';
+                feedback.innerHTML = '❌ Cuidado! Esse é um golpe clássico. Criminosos usam pontos prestes a expirar para fazer você clicar em links falsos sem pensar.';
+            }
+        }
+    </script>
 
 </body>
 </html>
